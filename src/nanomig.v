@@ -39,7 +39,8 @@ module nanomig (
    input	 kbd_mouse_level,
    input [1:0]	 kbd_mouse_type,
    input [7:0]	 kbd_mouse_data,
-   input [7:0]	 joystick,
+   input [7:0]	 joystick0,
+   input [7:0]	 joystick1,
 
    // UART/RS232 for e.g. DiagROM or MIDI
    output	 uart_tx,
@@ -48,7 +49,7 @@ module nanomig (
    // Interface MiSTeryNano sd card interface. This very simple connection allows the core
    // to request sectors from within a OSD selected image file
    input [7:0]	 sdc_img_mounted,
-   input [31:0]	 sdc_img_size,
+   input [63:0]	 sdc_img_size,
    output [7:0]	 sdc_rd,
    output [7:0]	 sdc_wr,
    output [31:0] sdc_sector,
@@ -60,14 +61,14 @@ module nanomig (
    output [7:0]	 sdc_byte_out_data,
 		
    // (s)ram interface
-   output [15:0] ram_data,    // sram data bus
-   input [15:0]	 ramdata_in,  // sram data bus in
-   input [47:0]	 chip48,      // big chip read
-   output        refresh,     // ram refresh cycle
+   output [15:0] ram_data, // sram data bus
+   input [15:0]	 ramdata_in, // sram data bus in
+   input [47:0]	 chip48, // big chip read
+   output	 refresh, // ram refresh cycle
    output [23:1] ram_address, // sram address bus
-   output	 _ram_bhe,    // sram upper byte select
-   output	 _ram_ble,    // sram lower byte select
-   output	 _ram_we,     // sram write enable
+   output	 _ram_bhe, // sram upper byte select
+   output	 _ram_ble, // sram lower byte select
+   output	 _ram_we, // sram write enable
    output	 _ram_oe      // sram output enable
 );
 
@@ -388,7 +389,7 @@ always @(posedge clk_sys) begin
 	    // image has just been mounted. Examine it further
 	    // by reading first sector.
 	    if(sdc_img_mounted[4+drv] && (ide_drv_state[drv] == IDE_DRV_STATE_NONE)) begin
-	       total_sectors[drv] <= { 9'd0, sdc_img_size[31:9] };	 
+	       total_sectors[drv] <= sdc_img_size[40:9];	 
 	       ide_drv_state[drv] <= IDE_DRV_STATE_MNT;
 	    end
 	 end
@@ -1038,8 +1039,8 @@ wire	   hs_in, vs_in;
 
 // JOY0 is actually the joystick port and and joy1 is being driven by usb mouse data
 // JOY2 and JOY3 
-wire [15:0] JOY0 = { 8'h00, joystick };   
-wire [15:0] JOY1 = 16'h0000;
+wire [15:0] JOY0 = { 8'h00, joystick0 };   
+wire [15:0] JOY1 = { 8'h00, joystick1 };   
 wire [15:0] JOY2 = 16'h0000;
 wire [15:0] JOY3 = 16'h0000;   
 
@@ -1153,7 +1154,7 @@ minimig minimig
 
         // sd card interface for floppy disk emulation
         .sdc_img_mounted    ( sdc_img_mounted[3:0]),
-        .sdc_img_size       ( sdc_img_size        ),  // length of image file
+        .sdc_img_size       ( sdc_img_size[31:0]  ),  // length of image file
         .sdc_rd             ( sdc_rd[3:0]         ),
 //        .sdc_wr             ( sdc_wr[3:0]         ),
         .sdc_sector         ( sdc_sector_int      ),

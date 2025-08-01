@@ -171,7 +171,7 @@ wire [31:0] sd_sector;
 wire [8:0]  sd_byte_index;
 wire        sd_rd_byte_strobe;
 wire        sd_busy, sd_done;
-wire [31:0] sd_img_size;
+wire [63:0] sd_img_size;
 wire [7:0]  sd_img_mounted;
 reg         sd_ready;
    
@@ -316,16 +316,9 @@ wire [14:0] audio_right;
 
 // map first HID/USB joystick into second amiga joystick port
 // wire in db9 joystick
-wire [7:0] joystick = { 
-	  (hid_joy0[7] | hid_joy1[7]), 
-	  (hid_joy0[6] | hid_joy1[6]), 
-	  (hid_joy0[5] | hid_joy1[5]), 
-	  (hid_joy0[4] | hid_joy1[4]),
-	  (hid_joy0[3] | hid_joy1[3]), 
-	  (hid_joy0[2] | hid_joy1[2]),
-	  (hid_joy0[1] | hid_joy1[1]),
-	  (hid_joy0[0] | hid_joy1[0]) };   
-   
+wire [7:0] joystick1 = hid_joy0;
+wire [7:0] joystick0 = hid_joy1;
+ 
 wire [23:1] cpu_a;
 wire cpu_as_n, cpu_lds_n, cpu_uds_n;
 wire cpu_rw, cpu_dtack_n;
@@ -389,7 +382,8 @@ nanomig nanomig
  .kbd_mouse_level(kbd_mouse_level),  
  .kbd_mouse_type(kbd_mouse_type),  
  .kbd_mouse_data(kbd_mouse_data),
- .joystick(joystick),
+ .joystick0(joystick0),
+ .joystick1(joystick1),
 				 
  // sd card interface for floppy disk and hdd emulation
  .sdc_img_size(sd_img_size),

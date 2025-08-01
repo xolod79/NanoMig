@@ -35,7 +35,7 @@ module sd_card # (
     input			  iack,
 
     // export sd image size   
-    output reg [31:0] image_size,
+    output reg [63:0] image_size,
     // up to four images supported (e.g. 2x floppy, 2xACSI)
     output reg [7:0]  image_mounted,
 
@@ -165,7 +165,7 @@ always @(posedge clk) begin
       command <= 8'hff;
       rstart_int <= 1'b0;
       wstart_int <= 1'b0;
-      image_size <= 32'd0;
+      image_size <= 64'd0;
       image_mounted <= 8'b00000000;
       state <= IDLE;      
 	  dinb_we <=1'b0;
@@ -256,7 +256,7 @@ always @(posedge clk) begin
 			   // MCU reports that some image has been inserted. If
 			   // the image size is 0, then no image is inserted
 			   if(byte_cnt == 4'd0) image_target <= data_in;
-			   if(byte_cnt == 4'd1) image_size[31:24] <= data_in;
+			   if(byte_cnt == 4'd1) image_size[63:24] <= { 32'h00000000, data_in };
 			   if(byte_cnt == 4'd2) image_size[23:16] <= data_in;
 			   if(byte_cnt == 4'd3) image_size[15:8]  <= data_in;
 			   if(byte_cnt == 4'd4) begin 
@@ -290,6 +290,26 @@ always @(posedge clk) begin
 					 // above.
 					 dinb_we <= 1'b1;
 				  end 
+			   end
+			end
+			
+			// SDC CMD 6: DIRECT is not used/supported
+			
+			// SDC CMD 7: LARGE FILE INSERTED
+			if(command == 8'd7) begin
+			   // MCU reports that some large image has been inserted.
+			   if(byte_cnt == 4'd0) image_target <= data_in;
+			   if(byte_cnt == 4'd1) image_size[63:56] <= data_in;
+			   if(byte_cnt == 4'd2) image_size[55:48] <= data_in;
+			   if(byte_cnt == 4'd3) image_size[47:40] <= data_in;
+			   if(byte_cnt == 4'd4) image_size[39:32] <= data_in;
+			   if(byte_cnt == 4'd5) image_size[31:24] <= data_in;
+			   if(byte_cnt == 4'd6) image_size[23:16] <= data_in;
+			   if(byte_cnt == 4'd7) image_size[15:8]  <= data_in;
+			   if(byte_cnt == 4'd8) begin 
+				  image_size[7:0]   <= data_in;
+				  if(image_target <= 8'd7)  // images 0..7 are supported
+					image_mounted[image_target] <= 1'b1;
 			   end
 			end
 			
