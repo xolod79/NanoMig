@@ -38,8 +38,11 @@ module top(
   output [1:0]	O_sdram_ba, // two banks
   output [3:0]	O_sdram_dqm, // 32/4
 
-  // generic IO, used for mouse/joystick/...
-  input [7:0]	io,
+  // generic IO, used for mouse & joystick
+  input [5:0]	io,
+
+  // spare IO, used for 2nd joystick
+  input [4:0]   spare,
 
   // interface to external BL616/M0S
   inout [5:0]	m0s,
@@ -67,8 +70,11 @@ module top(
   output [2:0]	tmds_d_p
 );
 
-// physcial dsub9 joystick  
+// physcial dsub9 joystick & mouse port 1 
 wire [5:0] db9_joy = { !io[5], !io[0], !io[2], !io[1], !io[4], !io[3] };   
+
+// physcial dsub9 joystick port 2  
+wire [4:0] db9_joy2 = { !spare[0], !spare[2], !spare[1], !spare[4], !spare[3] }; 
    
 wire [5:0]	leds;
 assign leds[5] = 1'b0;
@@ -343,8 +349,8 @@ osd_u8g2 osd_u8g2 (
 wire [14:0] audio_left;
 wire [14:0] audio_right;   
 
-// map first HID/USB joystick into second amiga joystick port
-// wire in db9 joystick
+// map first HID/USB joystick into first amiga joystick port
+// wire in db9 joystick & mouse
 wire [7:0] joystick1 = { 
 	   hid_joy0[7], 
 	   hid_joy0[6], 
@@ -355,8 +361,18 @@ wire [7:0] joystick1 = {
 	  (hid_joy0[1] | db9_joy[1]),
 	  (hid_joy0[0] | db9_joy[0]) };   
 
-wire [7:0] joystick0 = hid_joy1;
-   
+// map second HID/USB joystick into second amiga joystick port
+// wire in db9 joystick   
+wire [7:0] joystick0 = { 
+       hid_joy1[7], 
+       hid_joy1[6], 
+       hid_joy1[5], 
+      (hid_joy1[4] | db9_joy2[4]),
+      (hid_joy1[3] | db9_joy2[3]), 
+      (hid_joy1[2] | db9_joy2[2]),
+      (hid_joy1[1] | db9_joy2[1]),
+      (hid_joy1[0] | db9_joy2[0]) }; 
+
 wire [23:1] cpu_a;
 wire cpu_as_n, cpu_lds_n, cpu_uds_n;
 wire cpu_rw, cpu_dtack_n;
