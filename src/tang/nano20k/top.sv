@@ -18,6 +18,13 @@ module top(
   output [5:0]	leds_n,
   output		ws2812,
 
+  // interface to Tang onboard BL616 UART
+  input			uart_rx,
+  output		uart_tx,
+  // onboard Bl616 monitor console port interface
+  output		bl616_mon_tx,
+  input			bl616_mon_rx,
+
   // spi flash interface
   output		mspi_cs,
   output		mspi_clk,
@@ -45,7 +52,7 @@ module top(
   input [4:0]   spare,
 
   // interface to external BL616/M0S
-  inout [5:0]	m0s,
+  inout [4:0]	m0s,
 
   // MIDI/UART
   input			midi_in,
@@ -58,10 +65,11 @@ module top(
 	   
   // SPI connection to ob-board BL616. By default an external
   // connection is used with a M0S Dock
-  input			spi_sclk, // in... 
-  input			spi_csn, // in (io?)
-  output		spi_dir, // out
-  input			spi_dat, // in (io?)
+  input			spi_sclk,
+  input			spi_csn,
+  output		spi_dir,
+  input			spi_dat,
+  output		spi_irqn,
 
   // hdmi/tdms
   output		tmds_clk_n,
@@ -69,6 +77,10 @@ module top(
   output [2:0]	tmds_d_n,
   output [2:0]	tmds_d_p
 );
+
+// connect onboard BL616 console to hw pins for an USB-UART adapter
+assign uart_tx = bl616_mon_rx;
+assign bl616_mon_tx = uart_rx;
 
 // physcial dsub9 joystick & mouse port 1 
 wire [5:0] db9_joy = { !io[5], !io[0], !io[2], !io[1], !io[4], !io[3] };   
@@ -140,6 +152,37 @@ wire cpu_reset = |reset_cnt;
 wire sdram_ready;
 
 // -------------------------- M0S MCU interface -----------------------
+// intn and dout are outputs driven by the FPGA to the MCU
+// din, ss and clk are inputs coming from the MCU
+// onboard connection to on-board BL616
+
+assign spi_dir = spi_io_dout;
+assign m0s[4:0] = { spi_intn, 3'bzzz, spi_io_dout };
+assign spi_irqn = spi_intn;
+
+// by default the internal SPI is being used. Once there is
+// a select from the external spi, then the connection is
+// being switched
+reg spi_ext;
+always @(posedge clk_28m) begin
+    if(!pll_lock)
+        spi_ext = 1'b0;
+    else begin
+        // spi_ext is activated once the m0s pins 2 (ss or csn) is
+        // driven low by the m0s dock. This means that a m0s dock
+        // is connected and the FPGA switches its inputs to the
+        // m0s. Until then the inputs of the internal BL616 are
+        // being used.
+        if(m0s[2] == 1'b0)
+            spi_ext = 1'b1;
+    end
+end
+
+// switch between internal SPI connected to the on-board bl616
+// or to the external one possibly connected to a M0S Dock
+wire spi_io_din = spi_ext?m0s[1]:spi_dat;
+wire spi_io_ss = spi_ext?m0s[2]:spi_csn;
+wire spi_io_clk = spi_ext?m0s[3]:spi_sclk;
 
 // connect to ws2812 led
 wire [23:0] ws2812_color;
@@ -169,10 +212,10 @@ mcu_spi mcu (
 	 .reset(!pll_lock),
 
 	 // SPI interface to FPGA Companion
-     .spi_io_ss(m0s[2]),
-     .spi_io_clk(m0s[3]),
-     .spi_io_din(m0s[1]),
-     .spi_io_dout(m0s[0]),
+     .spi_io_ss ( spi_io_ss ),
+     .spi_io_clk( spi_io_clk  ),
+     .spi_io_din( spi_io_din  ),
+     .spi_io_dout( spi_io_dout ),
 
 	 // byte wide data in/out to the submodules
      .mcu_sys_strobe(mcu_sys_strobe),
@@ -304,7 +347,7 @@ sysctrl sysctrl (
 		.system_chipmem(osd_chipmem),
 		.system_slowmem(osd_slowmem),
 				 
-        .int_out_n(m0s[4]),
+        .int_out_n(spi_intn),
         .int_in( { 4'b0000, sdc_int, 1'b0, hid_int, 1'b0 }),
         .int_ack( int_ack ),
 
