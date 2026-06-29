@@ -1,8 +1,6 @@
 /*
     top.sv - NanoMig on Lattice/IcePi-Zero
 
-	Warning: This will currently not rebuild the config xml but instead just
-	use whatever is present from previous (gowin) builds. This needs to be fixed!
 	
 	openFPGALoader -cft231X --pins=7:3:5:6 lattice/icepi-zero/impl/nanomig_impl.bit 
 
@@ -11,7 +9,6 @@
 */ 
  
 `define LATTICE
-`define TMDS_BY_LOGIC
 `define INFER_DPRAM
 // `define ENABLE_TG68K
 `define DISABLE_IDE       // the inferred ram exceeds the chip
@@ -60,8 +57,10 @@ module top(
 );
 
 // map TMDS signals onto positive gpdi pins
-wire [7:0] tmds;
-assign gpdi_dp = { tmds[0], tmds[6], tmds[4], tmds[2] };
+//wire [7:0] tmds;
+//assign gpdi_dp = { tmds[0], tmds[6], tmds[4], tmds[2] };
+wire [3:0] tmds;
+assign gpdi_dp = { tmds[0], tmds[3], tmds[2], tmds[1] };
 
 // map joysticks onto GPIO 0 to 11
 assign gpio[5:0] = 6'hzz;
@@ -948,8 +947,8 @@ hdmi #(
   .clk_pixel(clk_pixel),
   .clk_audio(clk_audio),
   .audio_sample_word( audio_reg ),
-  .tmds_clock(tmds[1:0]),
-  .tmds(tmds[7:2]),
+  .tmds_clock(tmds[0]),
+  .tmds(tmds[3:1]),
 
   .pal_mode(vpal),
   .short_frame ( short_frame ),
