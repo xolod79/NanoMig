@@ -9,7 +9,7 @@ This is a port of NanoMig to the [Lattice ECP5 FPGA family](https://www.lattices
   - NanoMig working
   - IDE temporarily disabled due to excessive logic usage
   - Joysticks and Companion through GPIO
-  - Temporary work-around for [flash clock issues](tests)
+  - ~~Temporary work-around for [flash clock issues](tests)~~ fixed
   - HDMI signal are driven by logic. Should finally use DDR HW serializers or the like
   - Uses OSD menu config from Gowin setup. Needs a custom config
 

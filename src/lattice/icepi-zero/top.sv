@@ -29,11 +29,11 @@ module top(
 
   // spi flash interface
   output	mspi_cs,
-  output	mspi_clk,
   inout		mspi_di,
   inout		mspi_hold,
   inout		mspi_wp,
   inout		mspi_do,
+  input		mspi_clk_ts,
 
   // SDRAM
   output	O_sdram_clk,
@@ -821,15 +821,10 @@ sdram sdram (
 // run the flash a 85MHz. This is only used at power-up to copy kickstart
 // from flash to sdram
 
-`ifdef USE_USRMCLK
-// https://0x04.net/~mwk/doc/lattice/ecp5/FPGA-TN-02039-2-3-ECP5-and-ECP5-5G-sysCONFIG.pdf
 USRMCLK usrmclk (
  .USRMCLKI(clk_85m_shifted),
- .USRMCLKTS(!pll_lock)   // 0 = drive clock, this cannot be a constant!
+ .USRMCLKTS(mspi_clk_ts)   // 0 = drive clock, this cannot be a constant!
 )/* synthesis syn_noprune=1 */;   
-`else
-assign mspi_clk = clk_85m_shifted;
-`endif
 
 
 flash flash (
