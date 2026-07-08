@@ -9,9 +9,9 @@
 */ 
  
 `define LATTICE
-`define INFER_DPRAM
+// `define INFER_DPRAM
 // `define ENABLE_TG68K
-`define DISABLE_IDE       // the inferred ram exceeds the chip
+// `define DISABLE_IDE       // when using inferred ram, this exceeds the chip
 // `define HDMI_TEST_PATTERN  // display static test pattern on HDMI instead of amiga video
 // `define ENABLE_INT_ROM     // enable 2k internal test rom in nanomig.v
 // `define ENABLE_INT_RAM     // if internal rom is enabled, then this also enables 2k internal test ram in nanomig.v
@@ -57,8 +57,6 @@ module top(
 );
 
 // map TMDS signals onto positive gpdi pins
-//wire [7:0] tmds;
-//assign gpdi_dp = { tmds[0], tmds[6], tmds[4], tmds[2] };
 wire [3:0] tmds;
 assign gpdi_dp = { tmds[0], tmds[3], tmds[2], tmds[1] };
 
@@ -73,8 +71,12 @@ wire spi_dir;
 wire spi_irqn;
 assign gpio[25:21] = { 3'bzzz, spi_irqn, spi_dir };
 wire spi_csn  = gpio[23];
-wire spi_sclk = gpio[24];
 wire spi_dat  = gpio[25];
+
+// filter companion SPI clock
+wire [15:0] spi_sclk_D = { spi_sclk_D[14:0], gpio[24] } /* synthesis syn_keep=1 */ /* synthesis syn_dont_touch=1 */;
+wire spi_sclk = ( spi_sclk && spi_sclk_D != 16'h0000) ||
+                (!spi_sclk && spi_sclk_D == 16'hffff) /* synthesis syn_keep=1 */ /* synthesis syn_dont_touch=1 */;
 
 // physcial dsub9 joystick & mouse port 1 and 2
 wire [5:0] db9_joy0 = { !js0[5], !js0[0], !js0[2], !js0[1], !js0[4], !js0[3] };   

@@ -33,6 +33,12 @@
         <Source name="../../misc/sd_card.v" type="Verilog" type_short="Verilog">
             <Options/>
         </Source>
+        <Source name="sector_dpram.v" type="Verilog" type_short="Verilog">
+            <Options/>
+        </Source>
+        <Source name="ide_dpram.v" type="Verilog" type_short="Verilog">
+            <Options/>
+        </Source>
         <Source name="../../misc/sd_rw.v" type="Verilog" type_short="Verilog">
             <Options/>
         </Source>
@@ -175,6 +181,9 @@
             <Options/>
         </Source>
         <Source name="../../minimig-aga/gary.v" type="Verilog" type_short="Verilog">
+            <Options/>
+        </Source>
+        <Source name="../../minimig-aga/gayle.v" type="Verilog" type_short="Verilog">
             <Options/>
         </Source>
         <Source name="../../minimig-aga/ide.v" type="Verilog" type_short="Verilog">

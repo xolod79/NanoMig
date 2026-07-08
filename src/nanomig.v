@@ -88,7 +88,7 @@ module nanomig (
    output [15:0] fastram_din,
    output	 fastram_wr,
    input	 fastram_ready
-);
+); 
 `ifndef LATTICE
   `default_nettype none
 `endif
@@ -176,14 +176,19 @@ wire [1:0] cpucfg = (cpu_config == 2'd2) ? 2'b11 : cpu_config; //CPU-Type: 00 = 
 wire [2:0] cachecfg = 3'b000;  // no turbo chip and kick, no caches   
 // wire [2:0] cachecfg = 3'b010;  // permanent turbo kick
 
-// make the power led actually dim like on a real amiga
 wire	   pwr_led_bright;
+
+`ifndef VERILATOR
+// make the power led actually dim like on a real amiga
 reg [1:0]  pwr_led_cnt;
 
 assign pwr_led = pwr_led_bright?1'b1:!pwr_led_cnt;
    
 always @(negedge clk_sys)
   pwr_led_cnt <= pwr_led_cnt + 2'd1;
+`else
+assign pwr_led = pwr_led_bright;
+`endif
    
 // -------------- fast(er) ram interface used in turbo mode --------------
 
