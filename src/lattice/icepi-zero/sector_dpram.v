@@ -3,7 +3,8 @@
 /* /backup/lscc/diamond/3.14/ispfpga/bin/lin64/scuba -w -n sector_dpram -lang verilog -synth synplify -bus_exp 7 -bb -arch sa5p00 -type bram -wp 11 -rp 1010 -data_width 8 -rdata_width 8 -num_rows 512 -outdataA REGISTERED -outdataB REGISTERED -cascade -1 -resetmode SYNC -sync_reset -mem_init0 -writemodeA NORMAL -writemodeB NORMAL  */
 /* Tue Jul  7 12:41:46 2026 */
 
-
+// https://0x04.net/~mwk/doc/lattice/ecp5/FPGA-TN-02204-1-6-ECP5-and-ECP5-5G-Memory-Usage-Guide.pdf
+  
 `timescale 1 ns / 1 ps
 module sector_dpram (dina, dinb, ada, adb, clka, 
     clkb, cea, ceb, ocea, oceb, wrea, wreb, reseta, resetb, douta, doutb)/* synthesis NGD_DRC_MASK=1 */;
@@ -103,8 +104,8 @@ module sector_dpram (dina, dinb, ada, adb, clka,
     defparam sector_dpram_0_0_0.WRITEMODE_A = "NORMAL" ;
     defparam sector_dpram_0_0_0.GSR = "ENABLED" ;
     defparam sector_dpram_0_0_0.RESETMODE = "SYNC" ;
-    defparam sector_dpram_0_0_0.REGMODE_B = "OUTREG" ;
-    defparam sector_dpram_0_0_0.REGMODE_A = "OUTREG" ;
+    defparam sector_dpram_0_0_0.REGMODE_B = "NOREG" ;
+    defparam sector_dpram_0_0_0.REGMODE_A = "NOREG" ;
     defparam sector_dpram_0_0_0.DATA_WIDTH_B = 9 ;
     defparam sector_dpram_0_0_0.DATA_WIDTH_A = 9 ;
     DP16KD sector_dpram_0_0_0 (.DIA17(scuba_vlo), .DIA16(scuba_vlo), .DIA15(scuba_vlo), 

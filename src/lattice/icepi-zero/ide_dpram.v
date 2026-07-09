@@ -102,8 +102,8 @@ module ide_dpram (dina, dinb, ada, adb, clka, clkb,
     defparam ide_dpram_0_0_0_3.WRITEMODE_A = "NORMAL" ;
     defparam ide_dpram_0_0_0_3.GSR = "ENABLED" ;
     defparam ide_dpram_0_0_0_3.RESETMODE = "SYNC" ;
-    defparam ide_dpram_0_0_0_3.REGMODE_B = "OUTREG" ;
-    defparam ide_dpram_0_0_0_3.REGMODE_A = "OUTREG" ;
+    defparam ide_dpram_0_0_0_3.REGMODE_B = "NOREG" ;
+    defparam ide_dpram_0_0_0_3.REGMODE_A = "NOREG" ;
     defparam ide_dpram_0_0_0_3.DATA_WIDTH_B = 4 ;
     defparam ide_dpram_0_0_0_3.DATA_WIDTH_A = 4 ;
     DP16KD ide_dpram_0_0_0_3 (.DIA17(scuba_vlo), .DIA16(scuba_vlo), .DIA15(scuba_vlo), 
@@ -207,8 +207,8 @@ module ide_dpram (dina, dinb, ada, adb, clka, clkb,
     defparam ide_dpram_0_0_1_2.WRITEMODE_A = "NORMAL" ;
     defparam ide_dpram_0_0_1_2.GSR = "ENABLED" ;
     defparam ide_dpram_0_0_1_2.RESETMODE = "SYNC" ;
-    defparam ide_dpram_0_0_1_2.REGMODE_B = "OUTREG" ;
-    defparam ide_dpram_0_0_1_2.REGMODE_A = "OUTREG" ;
+    defparam ide_dpram_0_0_1_2.REGMODE_B = "NOREG" ;
+    defparam ide_dpram_0_0_1_2.REGMODE_A = "NOREG" ;
     defparam ide_dpram_0_0_1_2.DATA_WIDTH_B = 4 ;
     defparam ide_dpram_0_0_1_2.DATA_WIDTH_A = 4 ;
     DP16KD ide_dpram_0_0_1_2 (.DIA17(scuba_vlo), .DIA16(scuba_vlo), .DIA15(scuba_vlo), 
@@ -312,8 +312,8 @@ module ide_dpram (dina, dinb, ada, adb, clka, clkb,
     defparam ide_dpram_0_0_2_1.WRITEMODE_A = "NORMAL" ;
     defparam ide_dpram_0_0_2_1.GSR = "ENABLED" ;
     defparam ide_dpram_0_0_2_1.RESETMODE = "SYNC" ;
-    defparam ide_dpram_0_0_2_1.REGMODE_B = "OUTREG" ;
-    defparam ide_dpram_0_0_2_1.REGMODE_A = "OUTREG" ;
+    defparam ide_dpram_0_0_2_1.REGMODE_B = "NOREG" ;
+    defparam ide_dpram_0_0_2_1.REGMODE_A = "NOREG" ;
     defparam ide_dpram_0_0_2_1.DATA_WIDTH_B = 4 ;
     defparam ide_dpram_0_0_2_1.DATA_WIDTH_A = 4 ;
     DP16KD ide_dpram_0_0_2_1 (.DIA17(scuba_vlo), .DIA16(scuba_vlo), .DIA15(scuba_vlo), 
@@ -419,8 +419,8 @@ module ide_dpram (dina, dinb, ada, adb, clka, clkb,
     defparam ide_dpram_0_0_3_0.WRITEMODE_A = "NORMAL" ;
     defparam ide_dpram_0_0_3_0.GSR = "ENABLED" ;
     defparam ide_dpram_0_0_3_0.RESETMODE = "SYNC" ;
-    defparam ide_dpram_0_0_3_0.REGMODE_B = "OUTREG" ;
-    defparam ide_dpram_0_0_3_0.REGMODE_A = "OUTREG" ;
+    defparam ide_dpram_0_0_3_0.REGMODE_B = "NOREG" ;
+    defparam ide_dpram_0_0_3_0.REGMODE_A = "NOREG" ;
     defparam ide_dpram_0_0_3_0.DATA_WIDTH_B = 4 ;
     defparam ide_dpram_0_0_3_0.DATA_WIDTH_A = 4 ;
     DP16KD ide_dpram_0_0_3_0 (.DIA17(scuba_vlo), .DIA16(scuba_vlo), .DIA15(scuba_vlo), 
