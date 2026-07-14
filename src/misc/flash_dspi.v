@@ -41,7 +41,7 @@ parameter	   READ_DELAY = 0;
 reg		   dspi_mode;
 wire [1:0]	   dspi_out;
 
-reg mspi_cs_i=1'b1;
+reg mspi_cs_i = 1'b1;
 // drive hold and wp to their static default
 assign mspi_hold = !resetn?1'bz:1'b1;
 assign mspi_wp   = !resetn?1'bz:1'b1;
@@ -123,7 +123,7 @@ always @(posedge clk or negedge resetn) begin
       end
 	 
       // wait for rising edge of cs or end of init phase
-      if((csD && !csD2 && !busy)||(init == 5'd2)) begin
+      else if((csD && !csD2 && !busy)||(init == 5'd2)) begin
         mspi_cs_i <= 1'b0;	  // select flash chip	 
         busy <= 1'b1;
 

@@ -5,12 +5,12 @@
 `define GOWIN
 
 module top(
-  input			clk, // 50 MHz in
+   input			clk, // 50 MHz in
 
   input			reset_n, // S2
-  input			user_n, // S1
+  input			user, // S1
 
-  output [5:0]	leds,
+  output [5:0]	leds_n,
   output		ws2812,
 
   // spi flash interface
@@ -63,6 +63,9 @@ module top(
   output [2:0]	tmds_d_p
 );
 
+wire [5:0]	leds;
+assign leds_n = ~leds;  
+   
 // physcial dsub9 joystick & mouse port 1 is unused
 wire [5:0]	db9_joy = joya;
    
@@ -329,7 +332,7 @@ sysctrl sysctrl (
         .int_in( { 4'b0000, sdc_int, 1'b0, hid_int, 1'b0 }),
         .int_ack( int_ack ),
 
-        .buttons( {!user_n, !reset_n } ),
+        .buttons( {user, !reset_n } ),
         .leds(),
         .color(ws2812_color)
 );

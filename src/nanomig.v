@@ -1158,12 +1158,12 @@ always_ff @(posedge clk_sys) begin
 	if(clk7n_en) begin
 		if(!_ram_oe)
 			ramD <= { ramh[ram_address[10:1]], raml[ram_address[10:1]] };
-		
-		if(!_ram_we) begin
+	   end
+   
+           if(!_ram_we && int_ram_sel) begin
 		   if(!_ram_bhe) ramh[ram_address[10:1]] <= ram_data[15:8];
 		   if(!_ram_ble) raml[ram_address[10:1]] <= ram_data[7:0];
-		end	
-	end
+	   end
 end
 
 wire int_ram_sel = ram_address[22:11] == 12'h000;

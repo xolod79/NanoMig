@@ -3,14 +3,16 @@
 */ 
 
 `define GOWIN
+// `define ENABLE_INT_ROM
+// `define ENABLE_INT_RAM
 
 module top(
   input			clk, // 50 MHz in
 
-  input			reset_n, // S2
+  input			reset, // S2
   input			user_n, // S1
 
-  output [5:0]	leds,
+  output [5:0]	leds_n,
   output		ws2812,
 
   // spi flash interface
@@ -63,11 +65,14 @@ module top(
   output [2:0]	tmds_d_p
 );
 
+wire [5:0]	leds;
+assign leds_n = ~leds;   
+   
 // physcial dsub9 joystick & mouse port 1 is unused
-wire [5:0]	db9_joy = joya;
+wire [5:0]	db9_joy = { !joya[5], !joya[0], !joya[2], !joya[1], !joya[4], !joya[3] };
    
 // physcial dsub9 joystick port 2 ís unused
-wire [5:0] db9_joy2 = joyb;
+wire [5:0] db9_joy2 = { !joyb[5], !joyb[0], !joyb[2], !joyb[1], !joyb[4], !joyb[3] };
    
 // wire floppy and hdd drive leds into a single one
 // led 1 is the red part of the CFG RGB led
@@ -134,7 +139,7 @@ wire       osd_stereo_mix;      // 0=off, 1=on
 // generate a reset for some time after rom has been initialized
 reg [15:0] reset_cnt;
 always @(negedge clk_28m) begin
-    if(!pll_lock || !rom_done || !reset_n || osd_reset || kbd_reset)
+    if(!pll_lock || !rom_done || reset || osd_reset || kbd_reset)
         reset_cnt <= 16'hffff;
     else if(reset_cnt != 0)
         reset_cnt = reset_cnt - 16'd1;
@@ -330,7 +335,7 @@ sysctrl sysctrl (
         .int_in( { 4'b0000, sdc_int, 1'b0, hid_int, 1'b0 }),
         .int_ack( int_ack ),
 
-        .buttons( {!user_n, !reset_n } ),
+        .buttons( {!user_n, reset } ),
         .leds(),
         .color(ws2812_color)
 );
@@ -625,7 +630,7 @@ wire [15:0] sdram_din     = rom_done?ram_dout:flash_doutD;
 wire [1:0]  sdram_be      = rom_done?ram_be:2'b00;
 wire		sdram_we      = rom_done?sdram_rw:flash_ram_write; 
 
-sdram sdram (
+sdram #(.RASCAS_DELAY(2)) sdram (
 	.sd_data    ( IO_sdram_dq   ), // 32 bit bidirectional data bus
 	.sd_addr    ( O_sdram_addr  ), // 11 bit multiplexed address bus
 	.sd_dqm     ( O_sdram_dqm   ), // two byte masks
@@ -660,10 +665,11 @@ sdram sdram (
 
 // run the flash a 85MHz. This is only used at power-up to copy kickstart
 // from flash to sdram
-assign mspi_clk = !clk_85m;   
+// assign mspi_clk = !clk_85m;   
+assign mspi_clk = clk_85m_shifted;   
 flash flash (
     .clk       ( clk_85m     ),
-    .resetn    ( !(!pll_lock || boot_button_detected) ),
+    .resetn    ( pll_lock    ),
     .ready     ( flash_ready ),
 
     .address   ( flash_addr  ),

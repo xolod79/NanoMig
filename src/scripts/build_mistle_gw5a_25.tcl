@@ -4,6 +4,7 @@ source scripts/update_xml.tcl
 
 set_device GW5A-LV25LQ144C1/I0 -name GW5A-25A
 
+add_file mistle/gw5a_25/top.sv
 add_file nanomig.v
 add_file minimig-aga/amiga_clk.v
 add_file minimig-aga/cpu_wrapper.v
@@ -86,7 +87,6 @@ add_file tang/primer25k/gowin_pll/pll_init.v
 add_file tang/primer25k/gowin_dpb/sector_dpram.v
 add_file tang/primer25k/gowin_dpb/ide_dpram.v
 add_file misc/ws2812.v
-add_file mistle/gw5a_25/top.sv
 add_file misc/sdram.sv
 add_file mistle/gw3a_20/nanomig.cst
 add_file mistle/gw3a_20/nanomig.sdc
@@ -108,11 +108,11 @@ set_option -use_done_as_gpio 1
 set_option -use_cpu_as_gpio 1
 set_option -use_i2c_as_gpio 1
 set_option -use_ready_as_gpio 1
-set_option -use_jtag_as_gpio 1
+# set_option -use_jtag_as_gpio 1
 set_option -cst_warn_to_error 1
 set_option -multi_boot 0
 set_option -mspi_jump 0
-set_option -bit_compress 1
-set_option -loading_rate 70.000
+#set_option -bit_compress 1
+#set_option -loading_rate 70.000
 
 run all
