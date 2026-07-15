@@ -123,6 +123,7 @@
 		<listentry label="None" value="0"/>
 		<listentry label="Dim" value="1"/>
 		<listentry label="Black" value="2"/>
+		<listentry label="Balanced" value="3"/>
      </list>
      <list label="Filter:" id="F" default="0">
 		<listentry label="None" value="0"/>
