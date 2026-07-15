@@ -3,8 +3,6 @@
 */ 
 
 `define GOWIN
-// `define ENABLE_INT_ROM
-// `define ENABLE_INT_RAM
 
 module top(
   input			clk, // 50 MHz in

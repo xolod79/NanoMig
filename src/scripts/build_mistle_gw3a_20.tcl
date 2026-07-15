@@ -103,7 +103,6 @@ set_option -top_module top
 set_option -use_cpu_as_gpio 1
 set_option -use_mspi_as_gpio 1
 set_option -use_sspi_as_gpio 1
-set_option -use_jtag_as_gpio 0
 set_option -cst_warn_to_error 1
 set_option -multi_boot 0
 set_option -mspi_jump 0
