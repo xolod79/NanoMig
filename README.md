@@ -14,7 +14,7 @@ Current state:
   * Amiga 500, 1000 and Amiga 1200 modes
   * Kick ROM stored in flash ROM
   * 2MB chip, 4MB fast and 1.5MB slow RAM on Tang Nano
-  * 2MB chip, 28MB fast and 1.5MB slow RAM on ICEPI-ZERO
+  * 2MB chip, 24MB fast and 1.5MB slow RAM on ICEPI-ZERO
   * Accelerated 68020 support + CPU cache
   * OCS, ECS, AGA chipset 
   * ROM loader (Kickstart 1.3 / 3.1 / 3.2 / DiagRom)
@@ -101,7 +101,18 @@ Please make sure to use RDB (Rigid Disk Block) images with a **Start Offset 0**.
 If unallocated space is present before the RDB, the HDF image won't be recognized.
 
 ## Credits
-Many thanks to **Alastair M. Robinson** ([robinsonb5](https://github.com/robinsonb5)) for his contributions to the **NanoMig**, in particular **Fastram** and **68020** cpu!
+
+The **NanoMig** contains code written by:
+
+Till Harbaum  
+Alastair M. Robinson  
+Mateusz Nalewajski  
+Tobias Gubener  
+Rok Krajnc  
+Dennis van Weeren  
+
+Special thanks to **Till Harbaum** ([harbaum](https://github.com/harbaum)) for the invention of the **NanoMig**!  
+Many thanks to **Alastair M. Robinson** ([robinsonb5](https://github.com/robinsonb5)) for his contributions to the **NanoMig**, in particular **Fastram** and **68020** cpu!  
 Many thanks to **Mateusz Nalewajski** ([m1nl](https://github.com/m1nl)) and **djnice** ([djnice](https://github.com/djnice)) for the implementation of the **AGA chipset** with Embedded Block Ram and many more contributions!
 
 ## Build setting (Tang Nano 20K only!)
