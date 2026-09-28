@@ -12,8 +12,8 @@ create_generated_clock -name clk28 -source [get_pins {amigaclks/sysclk_inst/CLKO
 // every multi cycle setup exception needs its hold counterpart, otherwise the
 // hold analysis still assumes a single cycle relationship between the two
 // domains and reports thousands of meaningless violations
-set_multicycle_path -from [get_clocks {clk28}] -to [get_clocks {clk85}] 4
-set_multicycle_path -from [get_clocks {clk28}] -to [get_clocks {clk85}] -hold 3
+set_multicycle_path -from [get_clocks {clk28}] -to [get_clocks {clk85}] 3
+set_multicycle_path -from [get_clocks {clk28}] -to [get_clocks {clk85}] -hold 2
 set_multicycle_path -from [get_clocks {clk85}] -to [get_clocks {clk28}] -start 2
 set_multicycle_path -from [get_clocks {clk85}] -to [get_clocks {clk28}] -hold -start 1
 
