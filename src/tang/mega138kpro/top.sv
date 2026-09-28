@@ -314,8 +314,9 @@ wire spi_io_clk = spi_ext?pmod_companion_clk_F:spi_sclk;
 
 // connect to ws2812 led
 wire [23:0] ws2812_color;
-ws2812 ws2812_inst (
+ws2812 #(.USE_CLK7_EN(1)) ws2812_inst (
     .clk(clk_28m),
+    .clk7_en(clk7_en),
 	.reset(!pll_lock),
     .color(ws2812_color),
     .data(ws2812)
