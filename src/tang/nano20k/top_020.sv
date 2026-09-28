@@ -907,6 +907,7 @@ sdram #(
     .DATA_WIDTH(32),
     .RAS_WIDTH(11),
     .CAS_WIDTH(8),
+    .SYNC_DELAY(4),               // increased delay to relax timing and make the core fit
     .CHIP48_BURST(CHIP48_BURST)   // the wide 64 bit fetch AGA or cache needs
 ) sdram (
 	.sd_data    ( IO_sdram_dq   ), // 32 bit bidirectional data bus
