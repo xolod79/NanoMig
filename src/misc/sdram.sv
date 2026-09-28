@@ -51,7 +51,7 @@ module sdram #(
   parameter RAM_CLOCK_SPEED  = 85_000_000,
   parameter SYNC_CLOCK_SPEED =  7_080_000,
   parameter CHIP48_BURST = 0,
-  parameter SYNC_DELAY = 4,
+  parameter SYNC_DELAY = 3,  // delay higher than 4 breaks FX68K build
   parameter ACK_DELAY = 1
 ) (
   input  wire clk,
