@@ -14,7 +14,7 @@ module paula_floppy_fifo
 	output reg [15:0] out, // data out
 	input		  rd, // read from fifo
 	input		  wr, // write to fifo
-	output reg	  empty, // fifo is empty
+	output  	  empty, // fifo is empty
 	output		  full  // fifo is full
 );
 
@@ -40,8 +40,8 @@ always @(posedge clk) begin
 	 empty_write <= 1'b0;
       end else begin
   	 if(rd && !empty) begin
-	    if(empty_write) out <= in;	   
-	    else            out <= mem[out_ptr[10:0] + 11'd1];	    
+	    if(empty_write) out <= in;
+	    else            out <= mem[out_ptr[10:0] + 11'd1];
   	    out_ptr <= out_ptr + 12'd1;
 	 end
 	 if(wr && !full) begin
@@ -49,7 +49,7 @@ always @(posedge clk) begin
   	    in_ptr <= in_ptr + 12'd1;
 	    if(empty) begin
 	       out <= in;
-	       empty_write <= 1'b1;	       
+	       empty_write <= 1'b1;
 	    end
 	 end
       end
